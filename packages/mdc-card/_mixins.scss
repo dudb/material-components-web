@@ -64,11 +64,38 @@
     @include feature-targeting.targets($feat-structure) {
       @include container-layout_;
     }
+
+    // Transparent card border for high-contrast mode.
+    &::after {
+      @include shape-radius(variables.$shape-radius, $query: $query);
+      @include feature-targeting.targets($feat-structure) {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border: 1px solid transparent;
+        pointer-events: none;
+      }
+    }
   }
 
   .mdc-card--outlined {
     @include elevation-mixins.elevation(0, $query: $query);
     @include outline(variables.$outline-color, $query: $query);
+
+    // Outlined card already displays border in high-contrast mode. Overwriting
+    // styles set above to remove a duplicate border.
+    &::after {
+      @include feature-targeting.targets($feat-structure) {
+        display: inherit;
+        position: static;
+        border: none;
+        pointer-events: auto;
+      }
+    }
   }
 
   //
